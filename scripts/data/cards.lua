@@ -12,8 +12,8 @@ local function card(name, sprite, price)
 end
 
 return {
-    [0] = card("Stardust", 0, 1),
-    [1] = card("Gravity", 1, 1),
+    [1] = card("Stardust",  1, 1),
     [2] = card("Heat", 2, 1),
     [3] = card("Cold", 3, 1),
+    [4] = card("Gravity", 4, 1),
 }

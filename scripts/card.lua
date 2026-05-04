@@ -9,11 +9,16 @@ Card.__index = Card
 local Cards = require("scripts.data.cards")
 local GraphicsManager = require("scripts.gfx")
 
+local nextId = 0
+
 function Card.new(id, x, y)
     local data = Cards[id]
     assert(data, "Invalid Card ID: " .. tostring(id)) -- Never make an invalid card!
-
+    
+    nextId = nextId + 1
+    
     return setmetatable({
+        uid = nextId,
         x = x or 0,
         y = y or 0,
         dx = 0,

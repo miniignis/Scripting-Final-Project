@@ -1,24 +1,37 @@
 --[[
     File: main.lua
-    Purpose: to serve as the main file running the game, handling updates and draws.
+    Purpose: To serve as the main file running the game, handling updates and draws.
 ]]
 
 local ScreenManager = require("scripts.screen_manager")
 local GraphicsManager = require("scripts.gfx")
+local InputManager = require("scripts.input")
+local CardManager = require("scripts.card_manager")
 
 function love.load()
     ScreenManager.load(320, 180)
     GraphicsManager.loadSheet("cards", "assets/images/cards.png", 25, 35)
-
+    CardManager.load()
 end
 
 function love.update(dt)
+    InputManager.update()
+    CardManager.update(dt)
 end
 
 function love.draw()
     ScreenManager.start()
     
     love.graphics.clear(0.1, 0.1, 0.1)
+    CardManager.draw()
 
     ScreenManager.stop()
+end
+
+function love.mousepressed(button)
+    InputManager.mousePressed(button)
+end
+
+function love.mousereleased(button)
+    InputManager.mouseReleased(button)
 end
