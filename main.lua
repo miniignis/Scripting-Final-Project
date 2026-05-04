@@ -3,15 +3,16 @@
     Purpose: to serve as the main file running the game, handling updates and draws.
 ]]
 
-ScreenManager = require("scripts.screen_manager")
-gfx = require("scripts.gfx")
+local ScreenManager = require("scripts.screen_manager")
+local GraphicsManager = require("scripts.gfx")
 
 function love.load()
     ScreenManager.load(320, 180)
+    GraphicsManager.loadSheet("cards", "assets/images/cards.png", 25, 35)
+
 end
 
 function love.update(dt)
-
 end
 
 function love.draw()

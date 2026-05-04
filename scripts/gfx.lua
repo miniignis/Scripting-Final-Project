@@ -5,28 +5,32 @@
 
 local gfx = {}
 
-local atlas
-local quads = {}
+gfx.sheets = {}
+gfx.quads = {}
 
-function gfx.load(path, tileW, tileH)
-    atlas = love.graphics.newImage(path)
+function gfx.loadSheet(name, path, tileW, tileH)
+    local sheet = love.graphics.newImage(path) -- Load atlas
 
-    local w, h = atlas:getDimensions()
+    gfx.sheets[name] = sheet -- Setup sheets & quads to store new atlas.
+    gfx.quads[name] = {}
 
+    -- Loop through the atlas using the dimensions and setup quads for every sprite. Mark by ID.
+    local w, h = sheet:getDimensions()
     local id = 1
     for y = 0, h - tileH, tileH do
         for x = 0, w - tileW, tileW do
-            quads[id] = love.graphics.newQuad(x, y, tileW, tileH, w, h)
+            gfx.quads[name][id] = love.graphics.newQuad(x, y, tileW, tileH, w, h)
             id = id + 1
         end
     end
 end
 
-function gfx.sprite(id, x, y)
-    local q = quads[id]
-    if not q then return end
+function gfx.sprite(sheet, id, x, y)
+    local sh = gfx.sheets[sheet]
+    local quad = gfx.quads[sheet][id]
+    if not quad or not sh then return end
 
-    love.graphics.draw(atlas, q, x, y)
+    love.graphics.draw(sh, quad, x, y)
 end
 
 return gfx

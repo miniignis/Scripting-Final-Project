@@ -3,7 +3,8 @@
     Purpose: Holds data on card combinations and their worth.
 ]]
 
-local Combos = {}
+local function combo()
+    return {}
+end
 
-
-return Combos
+return {}
