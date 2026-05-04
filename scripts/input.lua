@@ -4,6 +4,7 @@
 ]]
 
 local Input = {}
+local ScreenManager = require("scripts.screen_manager")
 
 Input.mouse = {
     x = 0,
@@ -26,9 +27,10 @@ function Input.mouseReleased(button)
 end
 
 function Input.update()
-    Input.mouse.x, Input.mouse.y = love.mouse.getPosition()
-    
-    -- Reset justPressed and justReleased after processing
+    Input.mouse.x, Input.mouse.y = ScreenManager.toWorldCoords(love.mouse.getPosition())
+end
+
+function Input.postUpdate()
     Input.mouse.justPressed = false
     Input.mouse.justReleased = false
 end

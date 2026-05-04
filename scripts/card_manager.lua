@@ -5,12 +5,21 @@
 
 local CardManager = {}
 local Card = require("scripts.card")
+local Combos = require("scripts.data.combos")
+local Input = require("scripts.input")
 
 function CardManager.load()
     CardManager.cards = {}
 end
 
 function CardManager.update(dt)
+
+    --[[
+    if Input.mouse.justPressed then
+        CardManager.addCard(1, Input.mouse.x, Input.mouse.y)
+    end
+    ]]
+
     for _, card in pairs(CardManager.cards) do
         card:update(dt)
     end
@@ -29,8 +38,9 @@ function CardManager.addCard(id, x, y)
 end
 
 function CardManager.resolveCombination(cardA, cardB)
-    if cardA.uid ~= cardB.uid then
-    end
+    if cardA.uid == cardB.uid then return end
+    
+    local combo = Combos[cardA.id]
 end
 
 function CardManager.clear()

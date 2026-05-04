@@ -11,12 +11,16 @@ local CardManager = require("scripts.card_manager")
 function love.load()
     ScreenManager.load(320, 180)
     GraphicsManager.loadSheet("cards", "assets/images/cards.png", 25, 35)
+    GraphicsManager.loadSheet("mouse", "assets/images/mouse.png", 16, 16)
     CardManager.load()
 end
 
 function love.update(dt)
     InputManager.update()
+    
     CardManager.update(dt)
+
+    InputManager.postUpdate()
 end
 
 function love.draw()
@@ -25,13 +29,16 @@ function love.draw()
     love.graphics.clear(0.1, 0.1, 0.1)
     CardManager.draw()
 
+    -- Draw mouse cursor over everything else
+    GraphicsManager.sprite("mouse", 1, InputManager.mouse.x + 1, InputManager.mouse.y + 1)
+
     ScreenManager.stop()
 end
 
-function love.mousepressed(button)
+function love.mousepressed(x, y, button)
     InputManager.mousePressed(button)
 end
 
-function love.mousereleased(button)
+function love.mousereleased(x, y, button)
     InputManager.mouseReleased(button)
 end

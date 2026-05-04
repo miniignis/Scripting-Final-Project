@@ -8,6 +8,7 @@ local ScreenManager = {}
 function ScreenManager.load(resolutionX, resolutionY)
     
     love.graphics.setDefaultFilter("nearest", "nearest")
+    love.mouse.setVisible(false)
 
     ScreenManager.baseWidth = resolutionX
     ScreenManager.baseHeight = resolutionY
@@ -32,6 +33,16 @@ function ScreenManager.stop()
     
     love.graphics.setCanvas()
     love.graphics.draw(ScreenManager.canvas, x, y, 0, scale, scale)
+end
+
+function ScreenManager.toWorldCoords(screenX, screenY)
+    local winW, winH = love.graphics.getDimensions()
+    local scale = math.min(winW / ScreenManager.baseWidth, winH / ScreenManager.baseHeight)
+
+    local x = (screenX - (winW - ScreenManager.baseWidth * scale) / 2) / scale
+    local y = (screenY - (winH - ScreenManager.baseHeight * scale) / 2) / scale
+
+    return x, y
 end
 
 return ScreenManager
