@@ -7,12 +7,17 @@ local ScreenManager = require("scripts.screen_manager")
 local GraphicsManager = require("scripts.gfx")
 local InputManager = require("scripts.input")
 local CardManager = require("scripts.card_manager")
+local Cards = require("scripts.data.cards")
 
 function love.load()
     ScreenManager.load(320, 180)
     GraphicsManager.loadSheet("cards", "assets/images/cards.png", 25, 35)
     GraphicsManager.loadSheet("mouse", "assets/images/mouse.png", 16, 16)
     CardManager.load()
+
+    CardManager.addCard(Cards.Space, 50, 50)
+    CardManager.addCard(Cards.Energy, 50, 50)
+    CardManager.addCard(Cards.Time, 50, 50)
 end
 
 function love.update(dt)
@@ -41,4 +46,8 @@ end
 
 function love.mousereleased(x, y, button)
     InputManager.mouseReleased(button)
+end
+
+function love.mousemoved(x, y, dx, dy)
+    InputManager.mouseMoved(x, y, dx, dy)
 end
