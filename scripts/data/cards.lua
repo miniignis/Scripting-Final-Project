@@ -3,17 +3,23 @@
     Purpose: Holds data of cards (name & sprite).
 ]]
 
+local Cards = {}
+
+local nextIndex = 0
 local function card(name, sprite, price)
-    return {name = name, sprite = sprite, price = price}
+    Cards[nextIndex] = {id = nextIndex, name = name, sprite = sprite, price = price}
+    nextIndex = nextIndex + 1
 end
 
-return {
-    Energy = card("Energy", 1, 1),
-    Space = card("Space", 2, 1),
-    Time = card("Time", 3, 1),
-    Matter = card("Matter", 4, 1),
-    Gravity = card("Gravity", 5, 5),
-    Orbit = card("Orbit", 6, 5),
-    BlackHole = card("Black Hole", 7, 5),
-    Light = card("Light", 8, 5)
-}
+card("Matter", 1, 1)
+card("Time", 2, 1)
+card("Heat", 3, 1)
+card("Cold", 4, 1)
+card("Gravity", 5, 5)
+card("Blackhole", 6, 10)
+card("Planet", 7, 10)
+card("Water", 8, 10)
+card("Steam", 9, 20)
+card("Ice", 10, 20)
+
+return Cards

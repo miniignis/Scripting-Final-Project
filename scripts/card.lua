@@ -11,8 +11,9 @@ local GraphicsManager = require("scripts.gfx")
 local Util = require("scripts.util")
 
 local nextId = 0
-function Card.new(data, x, y)
+function Card.new(id, x, y)
     nextId = nextId + 1
+    local data = Cards[id]
     return setmetatable({
         uid = nextId,
         x = x or 0,
@@ -23,6 +24,10 @@ function Card.new(data, x, y)
         rotation = 0,
         data = data
     }, Card)
+end
+
+function Card:isWithinBounds(x, y)
+    return x > self.x and x < self.x + 25 and y > self.y and y < self.y + 35
 end
 
 function Card:draw()

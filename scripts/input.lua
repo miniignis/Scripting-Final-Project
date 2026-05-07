@@ -14,6 +14,7 @@ Input.mouse = {
     pressed = false,
     justPressed = false,
     justReleased = false,
+    icon = 2,
 }
 
 function Input.mousePressed(button)

@@ -15,9 +15,9 @@ function love.load()
     GraphicsManager.loadSheet("mouse", "assets/images/mouse.png", 16, 16)
     CardManager.load()
 
-    CardManager.addCard(Cards.Space, 50, 50)
-    CardManager.addCard(Cards.Energy, 50, 50)
-    CardManager.addCard(Cards.Time, 50, 50)
+    for i = 0, 3 do
+        CardManager.addCard(i, 320/2, 180/2)
+    end
 end
 
 function love.update(dt)
@@ -35,7 +35,7 @@ function love.draw()
     CardManager.draw()
 
     -- Draw mouse cursor over everything else
-    GraphicsManager.sprite("mouse", 1, InputManager.mouse.x + 1, InputManager.mouse.y + 1)
+    GraphicsManager.sprite("mouse", InputManager.mouse.icon, InputManager.mouse.x - 4, InputManager.mouse.y - 4)
 
     ScreenManager.stop()
 end
@@ -50,4 +50,11 @@ end
 
 function love.mousemoved(x, y, dx, dy)
     InputManager.mouseMoved(x, y, dx, dy)
+end
+
+function love.keypressed(key)
+    if key == "escape" then
+        local fullscreen = love.window.getFullscreen()
+        love.window.setFullscreen(not fullscreen, "desktop")
+    end
 end
