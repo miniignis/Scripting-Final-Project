@@ -5,30 +5,48 @@
 
 local CardManager = {}
 local Card = require("scripts.card")
+local CardData = require("scripts.data.cards")
 local Combos = require("scripts.data.combos")
 local Input = require("scripts.input")
+local SoundManager = require("scripts.sound")
+
+local function getHoveredCard()
+    local highestIndex = -1
+    for k, card in pairs(CardManager.cards) do
+        if Input.mouse.x > card.x and Input.mouse.x < card.x + 25 and Input.mouse.y > card.y and Input.mouse.y < card.y + 35 then
+            if k > highestIndex then
+                highestIndex = k
+            end
+        end
+    end
+    return highestIndex
+end
 
 function CardManager.load()
     CardManager.grabbedCard = nil
+    CardManager.hoveredCard = nil
     CardManager.cards = {}
 end
 
 function CardManager.update(dt)
 
+    -- Card Hovering
+    CardManager.hoveredCard = getHoveredCard()
+    if CardManager.hoveredCard then
+        Input.mouse.icon = 2
+    else
+        Input.mouse.icon = 1
+    end
+
     -- Handle card grabbing and dragging
     if Input.mouse.justPressed then
-        local highestIndex = -1
-        for k, card in pairs(CardManager.cards) do
-            if Input.mouse.x > card.x and Input.mouse.x < card.x + 25 and Input.mouse.y > card.y and Input.mouse.y < card.y + 35 then
-                if k > highestIndex then
-                    highestIndex = k
-                end
-            end
-        end
-        
-        if highestIndex ~= -1 then -- Always grab the topmost card if multiple are clicked
-            CardManager.cards[highestIndex], CardManager.cards[#CardManager.cards] = CardManager.cards[#CardManager.cards], CardManager.cards[highestIndex] -- Move to end of list to draw on top
+        local hoveredIndex = getHoveredCard()
+        if hoveredIndex ~= -1 then -- Always grab the topmost card if multiple are clicked
+
+            CardManager.cards[hoveredIndex], CardManager.cards[#CardManager.cards] = CardManager.cards[#CardManager.cards], CardManager.cards[hoveredIndex] -- Move to end of list to draw on top
             CardManager.grabbedCard = CardManager.cards[#CardManager.cards]
+
+            SoundManager.play("card_pickup", nil, math.random(0.9, 1.1))
         end
     end
 
@@ -38,6 +56,7 @@ function CardManager.update(dt)
         local target = nil
 
         if grabbed then
+            SoundManager.play("card_drop", 0.1, math.random(0.9, 1.1))
             for _, card in pairs(CardManager.cards) do
                 if card ~= grabbed and card:isWithinBounds(Input.mouse.x, Input.mouse.y) then
                     target = card
@@ -49,7 +68,6 @@ function CardManager.update(dt)
             end
         end
         CardManager.grabbedCard = nil
-        Input.mouse.icon = 2
     end
 
     if CardManager.grabbedCard then
@@ -67,13 +85,24 @@ function CardManager.update(dt)
     ]]
 
     -- Update all cards
-    for _, card in pairs(CardManager.cards) do
+    for _, card in ipairs(CardManager.cards) do
         card:update(dt)
     end
 end
 
 function CardManager.draw()
-    for _, card in pairs(CardManager.cards) do
+    for index, card in ipairs(CardManager.cards) do
+
+        -- Draw card name on hover.
+        if index == CardManager.hoveredCard and not CardManager.grabbedCard then
+            local tx, ty = card.x + (25 - #card.data.name * 8 / 2) - 6, card.y - 16
+            love.graphics.setColor(0, 0, 0, 0.8)
+            love.graphics.print(card.data.name, tx, ty + 1)
+            love.graphics.setColor(1, 1, 1, 1)
+            love.graphics.print(card.data.name, tx, ty)
+        end
+
+        -- Draw the card itself.
         card:draw()
     end
 end
@@ -85,20 +114,24 @@ function CardManager.addCard(id, x, y)
 end
 
 function CardManager.resolveCombination(cardA, cardB)
-    if not cardA or not cardB then return end
     if cardA.uid == cardB.uid then return end
+    if not cardA or not cardB then return end
 
-    local min = math.min(cardA.data.id, cardB.data.id)
-    local max = math.max(cardA.data.id, cardB.data.id)
+    local resultName = Combos.getResult(cardA.data.name, cardB.data.name)
+    if not resultName then return end
 
-    local result = Combos[min] and Combos[min][max] or nil
+    local resultCard = CardManager.addCard(
+        CardData.CardsByName[resultName].id,
+        (cardA.x + cardB.x) / 2,
+        (cardA.y + cardB.y) / 2
+    )
 
-    if result then -- Only make a card if the combination is valid
-       local comboCard = CardManager.addCard(result, (cardA.x + cardB.x) / 2, (cardA.y + cardB.y) / 2)
-       local velocity = 200
-       comboCard.dx = math.random(-velocity, velocity)
-       comboCard.dy = math.random(-velocity, velocity)
-    end
+    local velocity = 200
+    resultCard.dx = math.random(-velocity, velocity)
+    resultCard.dy = math.random(-velocity, velocity)
+
+    SoundManager.play("card_stack")
+    SoundManager.play("card_discovered", 0.5, math.random(0.9, 1.1))
 end
 
 function CardManager.clear()

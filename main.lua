@@ -7,16 +7,28 @@ local ScreenManager = require("scripts.screen_manager")
 local GraphicsManager = require("scripts.gfx")
 local InputManager = require("scripts.input")
 local CardManager = require("scripts.card_manager")
+local SoundManager = require("scripts.sound")
 local Cards = require("scripts.data.cards")
 
 function love.load()
     ScreenManager.load(320, 180)
+
     GraphicsManager.loadSheet("cards", "assets/images/cards.png", 25, 35)
     GraphicsManager.loadSheet("mouse", "assets/images/mouse.png", 16, 16)
+
+    SoundManager.loadSound("assets/sounds/card_pickup.wav", "card_pickup")
+    SoundManager.loadSound("assets/sounds/card_drop.wav", "card_drop")
+    SoundManager.loadSound("assets/sounds/card_stack.mp3", "card_stack")
+    SoundManager.loadSound("assets/sounds/card_discovered.wav", "card_discovered")
+    SoundManager.loadSound("assets/sounds/pack_completed.wav", "pack_completed")
+
     CardManager.load()
 
-    for i = 0, 3 do
-        CardManager.addCard(i, 320/2, 180/2)
+    local font = love.graphics.newFont("assets/fonts/monogram.ttf", 16)
+    love.graphics.setFont(font)
+
+    for i = 1, 4 do
+        CardManager.addCard(i, 320/2 + (i * 32) - 92, 180/2 - 16)
     end
 end
 

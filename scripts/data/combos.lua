@@ -5,15 +5,30 @@
 
 local Combos = {}
 
-local function combo(cardA, cardB, result)
-    local min = math.min(cardA, cardB)
-    local max = math.max(cardA, cardB)
-    Combos[min] = {} or Combos[min]
-    Combos[min][max] = result
+local function makeKey(a, b)
+    if a < b then
+        a, b = b, a
+    end
+
+    return a.."|"..b
 end
 
-combo(0, 1, 5)
-combo(0, 5, 6)
-combo(5, 5, 6)
+local function addCombo(cardA, cardB, result)
+    Combos[makeKey(cardA, cardB)] = result
+end
+
+function Combos.getResult(cardA, cardB)
+    return Combos[makeKey(cardA, cardB)]
+end
+
+addCombo("Dust", "Gravity", "Dirt")
+addCombo("Dust", "Time", "Gravity")
+addCombo("Gravity", "Gravity", "Blackhole")
+addCombo("Hydrogen", "Oxygen", "Water")
+addCombo("Dirt", "Water", "Water Planet")
+addCombo("Water Planet", "Dirt", "Earth")
+addCombo("Dirt", "Hydrogen", "Star")
+addCombo("Star", "Time", "Red Giant")
+addCombo("Red Giant", "Time", "Blackhole")
 
 return Combos

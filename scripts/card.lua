@@ -6,14 +6,14 @@
 local Card = {}
 Card.__index = Card
 
-local Cards = require("scripts.data.cards")
+local CardData = require("scripts.data.cards")
 local GraphicsManager = require("scripts.gfx")
 local Util = require("scripts.util")
+local ScreenManager = require("scripts.screen_manager")
 
 local nextId = 0
 function Card.new(id, x, y)
     nextId = nextId + 1
-    local data = Cards[id]
     return setmetatable({
         uid = nextId,
         x = x or 0,
@@ -22,7 +22,7 @@ function Card.new(id, x, y)
         dy = 0,
         scale = 1,
         rotation = 0,
-        data = data
+        data = CardData.Cards[id]
     }, Card)
 end
 
@@ -44,8 +44,8 @@ function Card:update(dt)
     self.dy = self.dy * 0.95
     
     -- Movement
-    self.x = self.x + self.dx * dt
-    self.y = self.y + self.dy * dt
+    self.x = Util.clamp(self.x + self.dx * dt, 0, ScreenManager.baseWidth - 25)
+    self.y = Util.clamp(self.y + self.dy * dt, 0, ScreenManager.baseHeight - 35)
 end
 
 return Card
