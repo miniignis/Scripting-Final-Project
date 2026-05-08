@@ -27,7 +27,7 @@ addCombo("Gravity", "Gravity", "Blackhole")
 addCombo("Hydrogen", "Oxygen", "Water")
 addCombo("Dirt", "Water", "Water Planet")
 addCombo("Water Planet", "Dirt", "Earth")
-addCombo("Dirt", "Hydrogen", "Star")
+addCombo("Gravity", "Hydrogen", "Star")
 addCombo("Star", "Time", "Red Giant")
 addCombo("Red Giant", "Time", "Blackhole")
 

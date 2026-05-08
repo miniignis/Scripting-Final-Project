@@ -31,6 +31,10 @@ addCard("Star")
 addCard("Red Giant")
 
 -- GARDEN PACK
+addCard("Seed")
+addCard("Soil")
+addCard("Water")
+addCard("Sunshine")
 
 -- COOKING PACK
 

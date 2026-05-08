@@ -6,6 +6,7 @@
 local CardManager = {}
 local Card = require("scripts.card")
 local CardData = require("scripts.data.cards")
+local PackData = require("scripts.data.packs")
 local Combos = require("scripts.data.combos")
 local Input = require("scripts.input")
 local SoundManager = require("scripts.sound")
@@ -25,6 +26,7 @@ end
 function CardManager.load()
     CardManager.grabbedCard = nil
     CardManager.hoveredCard = nil
+    CardManager.currentPackIndex = 1
     CardManager.cards = {}
 end
 
@@ -32,7 +34,7 @@ function CardManager.update(dt)
 
     -- Card Hovering
     CardManager.hoveredCard = getHoveredCard()
-    if CardManager.hoveredCard then
+    if CardManager.hoveredCard ~= -1 then
         Input.mouse.icon = 2
     else
         Input.mouse.icon = 1
@@ -104,6 +106,15 @@ function CardManager.draw()
 
         -- Draw the card itself.
         card:draw()
+    end
+end
+
+function CardManager.loadPack()
+    local pack = PackData[CardManager.currentPackIndex]
+
+    CardManager.clear() -- Remove all cards before loading new pack.
+    for index, card in pairs(pack.cards) do
+        CardManager.addCard(CardData.CardsByName[card].id, 320/2 + (index * 32) - 92, 180/2 - 16)
     end
 end
 

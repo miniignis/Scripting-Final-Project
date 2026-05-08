@@ -4,14 +4,26 @@
 ]]
 
 Cards = require("scripts.data.cards")
+local Packs = {}
 
-local function pack(sprite, name, cards, cost)
-    return {
-        sprite = sprite,
+local nextIndex = 0
+local function pack(name, cards)
+    
+    local data = {
+        sprite = nextIndex,
         name = name,
-        cards = cards,
-        cost = cost
+        cards = cards
     }
+    
+    nextIndex = nextIndex + 1
+
+    return data
 end
 
-return {}
+Packs = {
+    pack("Astronomy Pack", {"Dust", "Time", "Hydrogen", "Oxygen"}),
+    pack("Gardening Pack", {"Seed", "Soil", "Water", "Sunlight"}),
+    pack("Cooking Pack", {"Flour", "Eggs", "Milk", "Butter"})
+}
+
+return Packs

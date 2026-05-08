@@ -20,8 +20,8 @@ function Card.new(id, x, y)
         y = y or 0,
         dx = 0,
         dy = 0,
-        scale = 1,
-        rotation = 0,
+        scale = 2.5,
+        rotation = math.random(-10, 10),
         data = CardData.Cards[id]
     }, Card)
 end
