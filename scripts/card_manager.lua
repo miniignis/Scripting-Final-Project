@@ -26,7 +26,7 @@ end
 function CardManager.load()
     CardManager.grabbedCard = nil
     CardManager.hoveredCard = nil
-    CardManager.currentPackIndex = 1
+    CardManager.currentPackIndex = 2
     CardManager.cards = {}
 end
 

@@ -21,6 +21,7 @@ function Combos.getResult(cardA, cardB)
     return Combos[makeKey(cardA, cardB)]
 end
 
+-- ASTRONOMY PACK
 addCombo("Dust", "Gravity", "Dirt")
 addCombo("Dust", "Time", "Gravity")
 addCombo("Gravity", "Gravity", "Blackhole")
@@ -30,5 +31,16 @@ addCombo("Water Planet", "Dirt", "Earth")
 addCombo("Gravity", "Hydrogen", "Star")
 addCombo("Star", "Time", "Red Giant")
 addCombo("Red Giant", "Time", "Blackhole")
+addCombo("Star", "Star", "Constellation")
+
+-- GARDEN PACK
+addCombo("Seed", "Soil", "Sapling")
+addCombo("Sapling", "Time", "Tree")
+addCombo("Tree", "Time", "Apple")
+addCombo("Apple", "Time", "Worm")
+addCombo("Time", "Worm", "Death")
+addCombo("Worm", "Worm", "Worm")
+
+-- COOKING PACK
 
 return Combos

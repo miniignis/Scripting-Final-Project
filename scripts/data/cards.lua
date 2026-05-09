@@ -29,12 +29,17 @@ addCard("Water Planet")
 addCard("Earth")
 addCard("Star")
 addCard("Red Giant")
+addCard("Constellation")
 
 -- GARDEN PACK
 addCard("Seed")
 addCard("Soil")
-addCard("Water")
-addCard("Sunshine")
+addCard("Sapling")
+addCard("Tree")
+addCard("Apple")
+addCard("Worm")
+addCard("Death")
+-- Time is shared with Astronomy Pack.
 
 -- COOKING PACK
 

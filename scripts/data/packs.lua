@@ -22,7 +22,7 @@ end
 
 Packs = {
     pack("Astronomy Pack", {"Dust", "Time", "Hydrogen", "Oxygen"}),
-    pack("Gardening Pack", {"Seed", "Soil", "Water", "Sunlight"}),
+    pack("Gardening Pack", {"Seed", "Soil", "Time"}),
     pack("Cooking Pack", {"Flour", "Eggs", "Milk", "Butter"})
 }
 

@@ -22,17 +22,11 @@ function love.load()
     SoundManager.loadSound("assets/sounds/card_discovered.wav", "card_discovered")
     SoundManager.loadSound("assets/sounds/pack_completed.wav", "pack_completed")
 
-    CardManager.load()
-    CardManager.loadPack() -- Load the first pack by default
-
     local font = love.graphics.newFont("assets/fonts/monogram.ttf", 16)
     love.graphics.setFont(font)
 
-    --[[
-    for i = 1, 4 do
-        CardManager.addCard(i, 320/2 + (i * 32) - 92, 180/2 - 16)
-    end
-    ]]
+    CardManager.load()
+    CardManager.loadPack() -- Load the first pack by default
 end
 
 function love.update(dt)
