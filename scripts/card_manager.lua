@@ -28,6 +28,15 @@ function CardManager.load()
     CardManager.hoveredCard = nil
     CardManager.currentPackIndex = 2
     CardManager.cards = {}
+    CardManager.packDiscoveries = {}
+
+    for i = 1, #PackData do
+        CardManager.packDiscoveries[i] = {}
+        local discoveries = PackData[i].discoveries
+        for j = 1, #discoveries do
+            CardManager.packDiscoveries[i][discoveries[j]] = false
+        end
+    end
 end
 
 function CardManager.update(dt)
@@ -107,9 +116,31 @@ function CardManager.draw()
         -- Draw the card itself.
         card:draw()
     end
+
+    -- Draw card discovery progress.
+    -- Ideally don't do this math here and just store the counts in a variable, but this is simpler for now.
+    local currentPackDiscoveries = CardManager.packDiscoveries[CardManager.currentPackIndex]
+    local discoveredCount = 0
+    local totalCount = 0
+    for _, discovered in pairs(currentPackDiscoveries) do
+        totalCount = totalCount + 1
+        if discovered then
+            discoveredCount = discoveredCount + 1
+        end
+    end
+
+    love.graphics.setColor(0, 0, 0, 1)
+    love.graphics.rectangle("fill", 0, 169, 320, 11)
+
+    love.graphics.setColor(0.1, 0.5, 0.1, 1)
+    love.graphics.rectangle("fill", 0, 170, (discoveredCount / totalCount) * 320, 10)
+    
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.print(discoveredCount .. "/" .. totalCount .. " discovered", 112, 167)
 end
 
-function CardManager.loadPack()
+function CardManager.loadPack(packIndex)
+    CardManager.currentPackIndex = packIndex or 1
     local pack = PackData[CardManager.currentPackIndex]
 
     CardManager.clear() -- Remove all cards before loading new pack.
@@ -121,6 +152,28 @@ end
 function CardManager.addCard(id, x, y)
     local card = Card.new(id, x, y)
     table.insert(CardManager.cards, card)
+
+    -- Also check if this card is a new discovery for the current pack
+    local packIndex = CardManager.currentPackIndex
+    if CardManager.packDiscoveries[packIndex][card.data.name] == false then
+        CardManager.packDiscoveries[packIndex][card.data.name] = true
+        SoundManager.play("card_discovered", 0.5, math.random(0.9, 1.1))
+
+        -- Check if the pack is now completed
+        local packCompleted = true
+        for _, discovered in pairs(CardManager.packDiscoveries[packIndex]) do
+            if not discovered then
+                packCompleted = false
+                break
+            end
+        end
+
+        -- If the pack IS completed, play the pack completion sound and unlock the next pack
+        if packCompleted then
+            SoundManager.play("pack_completed", 0.7)
+        end
+    end
+    
     return card
 end
 
@@ -142,7 +195,7 @@ function CardManager.resolveCombination(cardA, cardB)
     resultCard.dy = math.random(-velocity, velocity)
 
     SoundManager.play("card_stack")
-    SoundManager.play("card_discovered", 0.5, math.random(0.9, 1.1))
+    --SoundManager.play("card_discovered", 0.5, math.random(0.9, 1.1))
 end
 
 function CardManager.clear()

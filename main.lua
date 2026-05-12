@@ -8,30 +8,40 @@ local GraphicsManager = require("scripts.gfx")
 local InputManager = require("scripts.input")
 local CardManager = require("scripts.card_manager")
 local SoundManager = require("scripts.sound")
-local Cards = require("scripts.data.cards")
+local UI = require("scripts.ui")
 
 function love.load()
     ScreenManager.load(320, 180)
 
     GraphicsManager.loadSheet("cards", "assets/images/cards.png", 25, 35)
     GraphicsManager.loadSheet("mouse", "assets/images/mouse.png", 16, 16)
+    GraphicsManager.loadSheet("packs", "assets/images/packs.png", 16, 24)
 
     SoundManager.loadSound("assets/sounds/card_pickup.wav", "card_pickup")
     SoundManager.loadSound("assets/sounds/card_drop.wav", "card_drop")
-    SoundManager.loadSound("assets/sounds/card_stack.mp3", "card_stack")
+    SoundManager.loadSound("assets/sounds/card_stack.wav", "card_stack")
     SoundManager.loadSound("assets/sounds/card_discovered.wav", "card_discovered")
     SoundManager.loadSound("assets/sounds/pack_completed.wav", "pack_completed")
 
     local font = love.graphics.newFont("assets/fonts/monogram.ttf", 16)
     love.graphics.setFont(font)
 
+    UI.load()
+
+    -- Add UI stuff
+    UI.addPanel(6, 6, 68, 32, {0.2, 0.2, 0.2, 0.8})
+    UI.addSpriteButton("packs", 1, 10, 10, function() CardManager.loadPack(1) end)
+    UI.addSpriteButton("packs", 2, 32, 10, function() CardManager.loadPack(2) end)
+    UI.addSpriteButton("packs", 3, 54, 10, function() end)
+
     CardManager.load()
-    CardManager.loadPack() -- Load the first pack by default
+    CardManager.loadPack(1) -- Load the first pack by default
 end
 
 function love.update(dt)
     InputManager.update()
     CardManager.update(dt)
+    UI.update(dt)
     InputManager.postUpdate()
 end
 
@@ -40,9 +50,10 @@ function love.draw()
     
     love.graphics.clear(0.1, 0.1, 0.1)
     CardManager.draw()
+    UI.draw()
 
     -- Draw mouse cursor over everything else
-    GraphicsManager.sprite("mouse", InputManager.mouse.icon, InputManager.mouse.x - 4, InputManager.mouse.y - 4)
+    GraphicsManager.sprite("mouse", InputManager.mouse.icon, InputManager.mouse.x - 1, InputManager.mouse.y - 1)
 
     ScreenManager.stop()
 end

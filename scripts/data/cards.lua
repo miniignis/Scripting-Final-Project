@@ -21,6 +21,7 @@ addCard("Dust")
 addCard("Time")
 addCard("Hydrogen")
 addCard("Oxygen")
+
 addCard("Gravity")
 addCard("Blackhole")
 addCard("Dirt")
@@ -35,13 +36,17 @@ addCard("Constellation")
 addCard("Seed")
 addCard("Soil")
 addCard("Sapling")
+
 addCard("Tree")
 addCard("Apple")
 addCard("Worm")
 addCard("Death")
+addCard("Nothingness")
+addCard("Forest")
 -- Time is shared with Astronomy Pack.
 
 -- COOKING PACK
+-- Not implemented yet due to time constraints, but possibly added in the future?
 
 return {
     Cards = Cards,

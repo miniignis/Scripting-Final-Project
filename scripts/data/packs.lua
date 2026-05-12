@@ -7,23 +7,24 @@ Cards = require("scripts.data.cards")
 local Packs = {}
 
 local nextIndex = 0
-local function pack(name, cards)
+local function pack(name, cards, discoveries)
     
     local data = {
         sprite = nextIndex,
         name = name,
-        cards = cards
+        cards = cards,
+        discoveries = discoveries
     }
     
     nextIndex = nextIndex + 1
 
     return data
-end
+  end
 
 Packs = {
-    pack("Astronomy Pack", {"Dust", "Time", "Hydrogen", "Oxygen"}),
-    pack("Gardening Pack", {"Seed", "Soil", "Time"}),
-    pack("Cooking Pack", {"Flour", "Eggs", "Milk", "Butter"})
+    pack("Astronomy Pack", {"Dust", "Time", "Hydrogen", "Oxygen"}, {"Gravity", "Blackhole", "Dirt", "Water", "Water Planet", "Earth", "Star", "Red Giant", "Constellation"}),
+    pack("Gardening Pack", {"Seed", "Soil", "Time"}, {"Tree", "Apple", "Worm", "Death", "Nothingness", "Forest"}),
+    pack("Cooking Pack", {"Flour", "Eggs", "Milk", "Butter"}, {})
 }
 
 return Packs

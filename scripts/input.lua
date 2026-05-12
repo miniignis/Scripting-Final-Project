@@ -34,6 +34,10 @@ function Input.mouseReleased(button)
     Input.mouse.justReleased = true
 end
 
+function Input.getMousePosition()
+    return Input.mouse.x, Input.mouse.y
+end
+
 function Input.update()
     Input.mouse.x, Input.mouse.y = ScreenManager.toWorldCoords(love.mouse.getPosition())
 end
