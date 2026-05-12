@@ -30,6 +30,8 @@ function CardManager.load()
     CardManager.cards = {}
     CardManager.packDiscoveries = {}
 
+    CardManager.confetti = {} -- This should probably be moved to a separate manager but it's easier to keep here for now since it's so tied to card combinations.
+
     for i = 1, #PackData do
         CardManager.packDiscoveries[i] = {}
         local discoveries = PackData[i].discoveries
@@ -99,6 +101,27 @@ function CardManager.update(dt)
     for _, card in ipairs(CardManager.cards) do
         card:update(dt)
     end
+
+    -- Update Confetti
+    for index, confetto in pairs(CardManager.confetti) do
+        confetto.previousX = confetto.x
+        confetto.previousY = confetto.y
+
+        confetto.x = confetto.x + confetto.dx * dt
+        confetto.y = confetto.y + confetto.dy * dt
+
+        confetto.dx = confetto.dx + math.random(-10, 10) -- Wind
+        confetto.dy = confetto.dy + math.random(-10, 10) -- Wind
+
+        confetto.dx = confetto.dx * 0.93 -- Air resistance
+        confetto.dy = confetto.dy * 0.93
+
+        -- Remove confetti that has fallen off the screen
+        confetto.life = confetto.life - dt
+        if confetto.life <= 0 then
+            table.remove(CardManager.confetti, index)
+        end
+    end
 end
 
 function CardManager.draw()
@@ -115,6 +138,13 @@ function CardManager.draw()
 
         -- Draw the card itself.
         card:draw()
+    end
+
+    -- Draw Confetti! (Did you know a single piece of confetti is called a "confetto"? Me neither, until I looked it up for this!)
+    for _, confetto in pairs(CardManager.confetti) do
+        love.graphics.setColor(confetto.color)
+        love.graphics.line(confetto.x, confetto.y, confetto.previousX, confetto.previousY)
+        love.graphics.setColor(1, 1, 1, 1)
     end
 
     -- Draw card discovery progress.
@@ -157,6 +187,8 @@ function CardManager.addCard(id, x, y)
     local packIndex = CardManager.currentPackIndex
     if CardManager.packDiscoveries[packIndex][card.data.name] == false then
         CardManager.packDiscoveries[packIndex][card.data.name] = true
+
+        CardManager.addConfetti(card.x, card.y)
         SoundManager.play("card_discovered", 0.5, math.random(0.9, 1.1))
 
         -- Check if the pack is now completed
@@ -200,6 +232,21 @@ end
 
 function CardManager.clear()
     CardManager.cards = {}
+end
+
+function CardManager.addConfetti(x, y)
+    for i = 1, 16 do
+        table.insert(CardManager.confetti, {
+            x = x,
+            y = y,
+            previousX = x,
+            previousY = y,
+            dx = math.random(-250, 250),
+            dy = math.random(-250, 250),
+            color = {math.random(), math.random(), math.random(), 1},
+            life = 1 + math.random(0.5)
+        })
+    end
 end
 
 return CardManager
