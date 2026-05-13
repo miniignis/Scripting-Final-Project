@@ -10,6 +10,12 @@ function SoundManager.loadSound(path, name)
     SoundManager[name] = sound
 end
 
+function SoundManager.loadMusic(path, name)
+    local music = love.audio.newSource(path, "stream")
+    music:setLooping(true)
+    SoundManager[name] = music
+end
+
 function SoundManager.play(name, volume, pitch)
     local sound = SoundManager[name]
 

@@ -10,6 +10,7 @@ local PackData = require("scripts.data.packs")
 local Combos = require("scripts.data.combos")
 local Input = require("scripts.input")
 local SoundManager = require("scripts.sound")
+local UI = require("scripts.ui")
 
 local function getHoveredCard()
     local highestIndex = -1
@@ -29,7 +30,7 @@ function CardManager.load()
     CardManager.currentPackIndex = 2
     CardManager.cards = {}
     CardManager.packDiscoveries = {}
-
+    CardManager.unlockedPacks = {true, false, false} -- First pack is unlocked by default, the rest are unlocked by discovering all cards in the previous pack.
     CardManager.confetti = {} -- This should probably be moved to a separate manager but it's easier to keep here for now since it's so tied to card combinations.
 
     for i = 1, #PackData do
@@ -159,6 +160,7 @@ function CardManager.draw()
         end
     end
 
+    -- Draw progress bar.
     love.graphics.setColor(0, 0, 0, 1)
     love.graphics.rectangle("fill", 0, 169, 320, 11)
 
@@ -173,6 +175,9 @@ function CardManager.loadPack(packIndex)
     CardManager.currentPackIndex = packIndex or 1
     local pack = PackData[CardManager.currentPackIndex]
 
+    if not CardManager.unlockedPacks[CardManager.currentPackIndex] then
+        return -- Pack is locked, do nothing.
+    end
     CardManager.clear() -- Remove all cards before loading new pack.
     for index, card in pairs(pack.cards) do
         CardManager.addCard(CardData.CardsByName[card].id, 320/2 + (index * 32) - 92, 180/2 - 16)
@@ -180,6 +185,7 @@ function CardManager.loadPack(packIndex)
 end
 
 function CardManager.addCard(id, x, y)
+    -- Add a card.
     local card = Card.new(id, x, y)
     table.insert(CardManager.cards, card)
 
@@ -202,6 +208,10 @@ function CardManager.addCard(id, x, y)
 
         -- If the pack IS completed, play the pack completion sound and unlock the next pack
         if packCompleted then
+            if CardManager.unlockedPacks[packIndex + 1] ~= nil then
+                CardManager.unlockedPacks[packIndex + 1] = true
+                
+            end
             SoundManager.play("pack_completed", 0.7)
         end
     end

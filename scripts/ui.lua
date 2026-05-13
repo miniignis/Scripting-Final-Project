@@ -46,9 +46,15 @@ function UI.addButton(x, y, width, height, text, onClick)
         width = width,
         height = height,
         text = text,
+        enabled = true,
         onClick = onClick,
         hovered = false,
         update = function(self, dt)
+            -- Don't update if the button is disabled.
+            if not self.enabled then
+                return
+            end
+
             local mouseX, mouseY = Input.getMousePosition()
             self.hovered = mouseX >= self.x and mouseX <= self.x + self.width and
                            mouseY >= self.y and mouseY <= self.y + self.height
@@ -68,7 +74,23 @@ function UI.addButton(x, y, width, height, text, onClick)
     table.insert(UI.components, button)
 end
 
-function UI.addSpriteButton(sheet, id, x, y, onClick)
+function UI.addText(text, x, y, color)
+    local uiText = {
+        text = text,
+        x = x,
+        y = y,
+        color = color or {1, 1, 1},
+        update = function(self, dt) end,
+        draw = function(self)
+            love.graphics.setColor(self.color)
+            love.graphics.print(self.text, self.x, self.y)
+            love.graphics.setColor(1, 1, 1)
+        end
+    }
+    table.insert(UI.components, uiText)
+end
+
+function UI.addSpriteButton(sheet, id, disabledID, x, y, onClick)
     local spr = GraphicsManager.getQuad(sheet, id)
     local _, _, w, h = spr:getViewport()
     local button = {
@@ -76,11 +98,20 @@ function UI.addSpriteButton(sheet, id, x, y, onClick)
         y = y,
         sheet = sheet,
         sprite = id,
+        disabledSprite = disabledID,
         width = w,
         height = h,
         onClick = onClick,
         hovered = false,
+        isEnabled = function(self)
+            return true
+        end,
         update = function(self, dt)
+            -- Don't update if the button is disabled.
+            if not self.isEnabled(self) then
+                return
+            end
+
             local mouseX, mouseY = Input.getMousePosition()
             self.hovered = mouseX >= self.x and mouseX <= self.x + self.width and
                            mouseY >= self.y and mouseY <= self.y + self.height
@@ -90,10 +121,12 @@ function UI.addSpriteButton(sheet, id, x, y, onClick)
             end
         end,
         draw = function(self)
-            GraphicsManager.sprite(self.sheet, self.sprite, self.x, self.y + (self.hovered and -1 or 0), 0, 1, 1)
+            local sprite = (self.isEnabled(self) and self.sprite or self.disabledSprite)
+            GraphicsManager.sprite(self.sheet, sprite, self.x, self.y + (self.hovered and -1 or 0), 0, 1, 1)
         end
     }
     table.insert(UI.components, button)
+    return button
 end
 
 return UI

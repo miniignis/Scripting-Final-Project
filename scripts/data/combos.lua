@@ -40,9 +40,9 @@ addCombo("Tree", "Time", "Apple")
 addCombo("Apple", "Time", "Worm")
 addCombo("Time", "Worm", "Death")
 addCombo("Worm", "Worm", "Worm")
-addCombo("Death", "Death", "Nothingness")
+addCombo("Death", "Death", "Nothing")
 addCombo("Tree", "Tree", "Forest")
-addCombo("Apple", "Worm", "Seed")
+addCombo("Apple", "Worm", "Soil")
 
 -- COOKING PACK
 

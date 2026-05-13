@@ -23,8 +23,9 @@ local function pack(name, cards, discoveries)
 
 Packs = {
     pack("Astronomy Pack", {"Dust", "Time", "Hydrogen", "Oxygen"}, {"Gravity", "Blackhole", "Dirt", "Water", "Water Planet", "Earth", "Star", "Red Giant", "Constellation"}),
-    pack("Gardening Pack", {"Seed", "Soil", "Time"}, {"Tree", "Apple", "Worm", "Death", "Nothingness", "Forest"}),
-    pack("Cooking Pack", {"Flour", "Eggs", "Milk", "Butter"}, {})
+    pack("Gardening Pack", {"Seed", "Soil", "Time"}, {"Tree", "Apple", "Worm", "Death", "Nothing", "Forest"}),
+    pack("The End", {"You Win!"}, {})
+    --pack("Cooking Pack", {"Flour", "Eggs", "Milk", "Butter"}, {})
 }
 
 return Packs

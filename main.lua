@@ -23,16 +23,20 @@ function love.load()
     SoundManager.loadSound("assets/sounds/card_discovered.wav", "card_discovered")
     SoundManager.loadSound("assets/sounds/pack_completed.wav", "pack_completed")
 
+    SoundManager.loadMusic("assets/sounds/background_music.mp3", "background_music")
+    SoundManager.play("background_music", 0.15)
+
     local font = love.graphics.newFont("assets/fonts/monogram.ttf", 16)
     love.graphics.setFont(font)
 
     UI.load()
 
     -- Add UI stuff
-    UI.addPanel(6, 6, 68, 32, {0.2, 0.2, 0.2, 0.8})
-    UI.addSpriteButton("packs", 1, 10, 10, function() CardManager.loadPack(1) end)
-    UI.addSpriteButton("packs", 2, 32, 10, function() CardManager.loadPack(2) end)
-    UI.addSpriteButton("packs", 3, 54, 10, function() end)
+    UI.addPanel(6, -4, 68, 48, {0.3, 0.3, 0.3, 0.2})
+    UI.addSpriteButton("packs", 1, 4, 10, 16, function() CardManager.loadPack(1) end)
+    UI.addSpriteButton("packs", 2, 4, 32, 16, function() CardManager.loadPack(2) end).isEnabled = function() return CardManager.unlockedPacks[2] end
+    UI.addSpriteButton("packs", 3, 4, 54, 16, function() CardManager.loadPack(3) end).isEnabled = function() return CardManager.unlockedPacks[3] end
+    UI.addText("Levels", 22, 1, {0.05, 0.05, 0.05})
 
     CardManager.load()
     CardManager.loadPack(1) -- Load the first pack by default

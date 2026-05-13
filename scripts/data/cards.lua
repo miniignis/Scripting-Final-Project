@@ -41,9 +41,12 @@ addCard("Tree")
 addCard("Apple")
 addCard("Worm")
 addCard("Death")
-addCard("Nothingness")
+addCard("Nothing")
 addCard("Forest")
 -- Time is shared with Astronomy Pack.
+
+-- Temporary End pack card, to be replaced with actual cards.
+addCard("You Win!")
 
 -- COOKING PACK
 -- Not implemented yet due to time constraints, but possibly added in the future?
